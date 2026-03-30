@@ -1,0 +1,56 @@
+pipeline {
+    agent any // Runs on any available agent
+
+    environment {
+        // Define reusable variables
+        APP_NAME = "my-application"
+        DOCKER_IMAGE = "my-repo/${APP_NAME}:${BUILD_NUMBER}"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Pulls code from your configured SCM
+                checkout scm
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building the application..."
+                // Replace with your actual build command (e.g., mvn, npm, gradle)
+                sh 'echo "Build complete"'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running unit tests..."
+                // Example test command
+                sh 'echo "Tests passed"'
+            }
+        }
+
+        stage('Deploy') {
+            // Deploy only runs if the previous stages passed
+            steps {
+                echo "Deploying to production..."
+                sh "echo Deploying ${DOCKER_IMAGE}..."
+            }
+        }
+    }
+
+    post {
+        // Actions to perform after the pipeline finishes
+        success {
+            echo "Pipeline succeeded! Sending notification..."
+        }
+        failure {
+            echo "Pipeline failed. Check logs."
+        }
+        always {
+            // Clean up workspace
+            cleanWs()
+        }
+    }
+}
