@@ -33,6 +33,9 @@ pipeline {
 
         stage('Deploy') {
             // Deploy only runs if the previous stages passed
+
+
+
             steps {
                 echo "Deploying to production..."
                 sh "echo Deploying ${DOCKER_IMAGE}..."
